@@ -65,16 +65,20 @@
 	function onScanSuccess(decodedText, decodedResult) {
 	    if(isJson(decodedResult["decodedText"])){
 	    	person = jQuery.parseJSON(decodedResult["decodedText"]);
-    		if(!attendance.includes(decodedResult["decodedText"])){
-        	    attendance.push(decodedResult["decodedText"]);
-    			$.cookie('attendance', JSON.stringify(attendance));
-    			counter++;
-    			add_to_List(counter,person);
-        	}else{
-        		alert("You're already scanned!");
-        	}
+    		if(person["fname"]==""||person["lname"]==""||person["email"]==""){
+    			alert("Please input your information!");
+    		}else{
+	    		if(!attendance.includes(decodedResult["decodedText"])){
+	        	    attendance.push(decodedResult["decodedText"]);
+	    			$.cookie('attendance', JSON.stringify(attendance));
+	    			counter++;
+	    			add_to_List(counter,person);
+	        	}else{
+	        		alert("You're already scanned!");
+	        	}
+	        }
         }else{
-        	alert("Invalid QR!");
+        	alert("Only use QR Codes generated for the event.");
         }
 
 	}
