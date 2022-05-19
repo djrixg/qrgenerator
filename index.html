@@ -41,7 +41,7 @@
   </div>
 	<div class="container" style="margin-top: 100px;">
 		<div class="row">
-			<div id="col-xs-10 col-md-6">
+			<div id="form-holder">
 			  <div class="form-group">
 			    <label for="fname">First Name</label>
 			    <input type="text" class="form-control" id="fname" placeholder="First Name">
@@ -75,8 +75,11 @@
 	<script type="text/javascript">
 		var element = $("#qrcode");
 		$("#screenshot").on('click',function(){
-		  if($("#fname").val()==""||$("#lname").val()==""||$("#email").val()==""||$("#field").val()==""){
-		  	alert("Please don't leave anything blank");
+		  if($("#fname").val()==""||$("#lname").val()==""||$("#email").val()==""){
+		  	if($("#email").val()==""){$("#email").focus()}
+		  	if($("#lname").val()==""){$("#lname").focus()}
+		  	if($("#fname").val()==""){$("#fname").focus()}
+		  	// alert("Please don't leave anything blank");
 	  		}else{
 			$("#qrcode").empty();
 			$("#download").removeClass("hidden");
