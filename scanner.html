@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Scanner</title>
 	<script src="html5-qrcode.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="bootstrap.min.css">
@@ -105,7 +105,7 @@
 	}
 	document.getElementById("download-button").addEventListener("click", function () {
 		var html = document.querySelector("table").outerHTML;
-		htmlToCSV(html, "students.csv");
+		htmlToCSV(html, "Attendance - AFlareToRemember.csv");
 	});
 	//Optional if gusto mag stop after scanning
 	// var html5QrcodeScanner = new Html5QrcodeScanner(
