@@ -15,6 +15,7 @@
 	</div>
 	<div class="col-md-6 col-sm-12">
 		<button id="download-button" class="btn btn-success">Download CSV</button>
+		<button onclick="clear_data()" class="btn btn-secondary">Clear Table</button>
 		<table class="table table-striped">
 		  <thead>
 		    <tr>
@@ -30,8 +31,13 @@
 		</table>
 	</div>
 <script type="text/javascript">
-	// $.removeCookie('attendance');
 	// $("#reader__dashboard_section_swaplink").addClass("hidden");
+	function clear_data(){
+		if(prompt("Type \"confirm\" to clear the data.")=="confirm"){
+			$.removeCookie('attendance');
+			location.reload();
+		}
+	}
 	var attendance = [];
 	counter = 0;
 	function add_to_List(c,person){
