@@ -77,9 +77,9 @@
 	<script type="text/javascript">
 		var element = $("#qrcode");
 		$("#screenshot").on('click',function(){
-		  // if($("#fname").val()==""||$("#lname").val()==""||$("#email").val()==""||$("#field").val()==""){
-		  // 	alert("Please don't leave anything blank");
-	  	// 	}else{
+		  if($("#fname").val()==""||$("#lname").val()==""||$("#email").val()==""||$("#field").val()==""){
+		  	alert("Please don't leave anything blank");
+	  		}else{
 			$("#qrcode").empty();
 			$("#download").removeClass("hidden");
 			  qr_code_size = 200;
@@ -95,7 +95,7 @@
 	  	        $([document.documentElement, document.body]).animate({
 		        scrollTop: $("#qrcode").offset().top
 		    }, 2000);
-	  		// }
+	  		}
 		});
 		function downloadURI(uri, name) {
 		    var link = document.createElement("a");
