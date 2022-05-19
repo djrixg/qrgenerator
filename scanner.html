@@ -54,9 +54,17 @@
 		}
 	}
 	attendance = jQuery.parseJSON($.cookie('attendance'));
+	function isJson(str) {
+	    try {
+	        JSON.parse(str);
+	    } catch (e) {
+	        return false;
+	    }
+	    return true;
+	}
 	function onScanSuccess(decodedText, decodedResult) {
-	    person = jQuery.parseJSON(decodedResult["decodedText"]);
-	    if(person["fname"]){
+	    if(isJson(decodedResult["decodedText"])){
+	    	person = jQuery.parseJSON(decodedResult["decodedText"]);
     		if(!attendance.includes(decodedResult["decodedText"])){
         	    attendance.push(decodedResult["decodedText"]);
     			$.cookie('attendance', JSON.stringify(attendance));
@@ -65,6 +73,8 @@
         	}else{
         		alert("You're already scanned!");
         	}
+        }else{
+        	alert("Invalid QR!");
         }
 
 	}
