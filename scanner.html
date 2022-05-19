@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Scanner</title>
+	<script src="html5-qrcode.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+	<script src="jquery.js"></script>
+	<script src="qrcode.min.js"></script>
+	<script src="jquery.cookie.js"></script>
+</head>
+<body class="container" style="padding-top: 50px;">
+	<div class="col-md-4 col-sm-12">
+		<div width="100%" id="reader"></div>
+	</div>
+	<div class="col-md-6 col-sm-12">
+		<button id="download-button">Download CSV</button>
+		<table class="table table-striped">
+		  <thead>
+		    <tr>
+		      <th scope="col">#</th>
+		      <th scope="col">First</th>
+		      <th scope="col">Last</th>
+		      <th scope="col">Email</th>
+		      <th scope="col">Industry</th>
+		    </tr>
+		  </thead>
+		  <tbody id="content">
+		  </tbody>
+		</table>
+	</div>
+<script type="text/javascript">
+	// $.removeCookie('attendance');
+	// $("#reader__dashboard_section_swaplink").addClass("hidden");
+	var attendance = [];
+	counter = 0;
+	function add_to_List(c,person){
+		$("#content").append(`<tr>
+			<td>`+c+`</td>
+			<td>`+person["fname"]+`</td>
+			<td>`+person["lname"]+`</td>
+			<td>`+person["email"]+`</td>
+			<td>`+person["field"]+`</td>
+		</tr>`);
+	}
+	if(typeof $.cookie('attendance') === 'undefined'){
+		$.cookie('attendance', JSON.stringify(attendance));
+	}else{
+		temp = jQuery.parseJSON($.cookie('attendance'));
+		for(let a=0;a<temp.length;a++){
+			person = jQuery.parseJSON(temp[a]);
+			add_to_List(a+1,person);
+			counter++;
+		}
+	}
+	attendance = jQuery.parseJSON($.cookie('attendance'));
+	function onScanSuccess(decodedText, decodedResult) {
+	    person = jQuery.parseJSON(decodedResult["decodedText"]);
+	    if(person["fname"]){
+    		if(!attendance.includes(decodedResult["decodedText"])){
+        	    attendance.push(decodedResult["decodedText"]);
+    			$.cookie('attendance', JSON.stringify(attendance));
+    			counter++;
+    			add_to_List(counter,person);
+        	}else{
+        		alert("You're already scanned!");
+        	}
+        }
+
+	}
+
+	function onScanError(errorMessage) {
+	    // handle on error condition, with error message
+	}
+
+	let html5QrcodeScanner = new Html5QrcodeScanner(
+  "reader",
+  { fps: 10, qrbox: {width: 250, height: 250} },
+  /* verbose= */ false);
+	html5QrcodeScanner.render(onScanSuccess, onScanError);
+
+
+	function htmlToCSV(html, filename) {
+		var data = [];
+		var rows = document.querySelectorAll("table tr");		
+		for (var i = 0; i < rows.length; i++) {
+			var row = [], cols = rows[i].querySelectorAll("td, th");
+					
+			for (var j = 0; j < cols.length; j++) {
+			        row.push(cols[j].innerText);
+	        }	        
+			data.push(row.join(",")); 		
+		}
+		downloadCSVFile(data.join("\n"), filename);
+	}
+	function downloadCSVFile(csv, filename) {
+		var csv_file, download_link;
+		csv_file = new Blob([csv], {type: "text/csv"});
+		download_link = document.createElement("a");
+		download_link.download = filename;
+		download_link.href = window.URL.createObjectURL(csv_file);
+		download_link.style.display = "none";
+		document.body.appendChild(download_link);
+		download_link.click();
+	}
+	document.getElementById("download-button").addEventListener("click", function () {
+		var html = document.querySelector("table").outerHTML;
+		htmlToCSV(html, "students.csv");
+	});
+	//Optional if gusto mag stop after scanning
+	// var html5QrcodeScanner = new Html5QrcodeScanner(
+ //    "reader", { fps: 10, qrbox: 250 });
+        
+	// function onScanSuccess(decodedText, decodedResult) {
+	//     // Handle on success condition with the decoded text or result.
+	//     console.log(`Scan result: ${decodedText}`, decodedResult);
+	//     // ...
+	//     html5QrcodeScanner.clear();
+	//     // ^ this will stop the scanner (video feed) and clear the scan area.
+	// }
+
+	// html5QrcodeScanner.render(onScanSuccess);
+</script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>QR Generator</title>
+	<script src="jquery.js"></script>
+	<script src="qrcode.min.js"></script>
+	<script src="jspdf.debug.js"></script>
+	<link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+</head>
+<body><br>
+	<div class="container">
+		<div class="row">
+			<div id="col-xs-10 col-md-6">
+			  <div class="form-group">
+			    <label for="fname">First Name</label>
+			    <input type="text" class="form-control" id="fname" placeholder="First Name">
+			  </div>
+			  <div class="form-group">
+			    <label for="lname">Last Name</label>
+			    <input type="text" class="form-control" id="lname" placeholder="Last Name">
+			  </div>
+			  <div class="form-group">
+			    <label for="email">Email address</label>
+			    <input type="email" class="form-control" id="email" placeholder="Enter email">
+			  </div>
+			  <div class="form-group">
+				<label for="lname">Industry/Specialty/Skills</label>
+				<input type="text" class="form-control" id="field" placeholder="Example: Marketing, Web development, IoT, etc">
+				<small class="form-text text-muted">Input your industry/specialty/skills separated by a comma (,).</small>
+			  </div>
+			  <!-- <button class="btn btn-primary">Submit</button> -->
+			  <button class="btn btn-primary" id="screenshot">Generate QR</button>
+			</div>
+			<div class="col-xs-10 col-md-6 container">
+				<div class="row">
+					<div id="qrcode" class="col-xs-12" style="margin-top:20px" width="100%"></div>
+				<div class="row hidden" id="download">
+					<button style="margin-top: 10px;" class="btn btn-primary" onclick="DownloadAsImage()">Download QR Code</button>
+					<small class="text-muted">For mobile, long-press the QR Code and save to gallery.</small>
+				</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		var element = $("#qrcode");
+		$("#screenshot").on('click',function(){
+		  if($("#fname").val()==""||$("#lname").val()==""||$("#email").val()==""||$("#field").val()==""){
+		  	alert("Please don't leave anything blank");
+	  		}else{
+			$("#qrcode").empty();
+			$("#download").removeClass("hidden");
+			  qr_code_size = 200;
+	  		  temp = {"fname": $("#fname").val(), "lname": $("#lname").val(),"email":$("#email").val(),"field":$("#field").val()};
+	  			new QRCode(document.getElementById("qrcode"), {
+	  		            text: JSON.stringify(temp),
+	  		            width: qr_code_size,
+	  		            height: qr_code_size,
+	  		            colorDark : "#000000",
+	  		            colorLight : "#ffffff",
+	  		            correctLevel : QRCode.CorrectLevel.H
+	  	        });
+	  		}
+		});
+		function downloadURI(uri, name) {
+		    var link = document.createElement("a");
+
+		    link.download = name;
+		    link.href = uri;
+		    document.body.appendChild(link);
+		    link.click();
+		    clearDynamicLink(link); 
+		}
+
+		function DownloadAsImage() {
+		    var element = $("#qrcode img").removeAttr("style")[0];
+		    html2canvas(element).then(function (canvas) {
+		        var myImage = canvas.toDataURL();
+		        downloadURI(myImage, "QR.png");
+		    });
+		}
+	</script>
+</body>
+</html>
